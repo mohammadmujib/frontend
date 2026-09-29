@@ -1,42 +1,120 @@
-# 🚀 React 19 & Next.js Latest - 7 Day Interview Prep Guide
+# 🚀 React 19 & Next.js 15 - Complete Interview Prep Guide
 
-## 📅 7-Day Study Plan
+## 📋 Table of Contents
 
-### **Day 1: React 19 Fundamentals & New Features**
-### **Day 2: React 19 Advanced Hooks & Patterns**
-### **Day 3: Server Components & Actions**
-### **Day 4: Next.js 15 New Features**
-### **Day 5: Performance & Optimization**
-### **Day 6: Real-world Patterns & Best Practices**
-### **Day 7: Mock Interview & Q&A**
+1. [7-Day Study Plan](#7-day-study-plan)
+2. [Day 1: React 19 Fundamentals](#day-1-react-19-fundamentals)
+3. [Day 2: React 19 Advanced Hooks](#day-2-react-19-advanced-hooks)
+4. [Day 3: Server Components & Actions](#day-3-server-components--actions)
+5. [Day 4: Next.js 15 Features](#day-4-nextjs-15-features)
+6. [Day 5: Performance & Optimization](#day-5-performance--optimization)
+7. [Day 6: Real-world Patterns](#day-6-real-world-patterns)
+8. [Day 7: Interview Q&A](#day-7-interview-qa)
 
 ---
 
-## 🎯 DAY 1: React 19 Fundamentals & New Features
+## 📅 7-Day Study Plan
 
-### What's New in React 19?
+### Overview
 
-1. **React Compiler** - Automatic optimization
-2. **Server Components** - First-class support
-3. **Actions** - Simplified async operations
-4. **New Hooks** - `useActionState`, `useFormStatus`, `useOptimistic`
-5. **Ref as Prop** - No more forwardRef needed
-6. **Hydration Improvements** - Better SSR support
+| Day | Topic | Duration | Key Focus |
+|-----|-------|----------|-----------|
+| **Day 1** | React 19 Fundamentals | 4-5 hrs | React Compiler, Ref as Prop, useActionState |
+| **Day 2** | React 19 Advanced Hooks | 4-5 hrs | useFormStatus, useOptimistic, use() hook |
+| **Day 3** | Server Components & Actions | 4-5 hrs | Server Components, Server Actions, Mixing |
+| **Day 4** | Next.js 15 Features | 4-5 hrs | App Router, API Routes, Middleware |
+| **Day 5** | Performance & Optimization | 4-5 hrs | ISR, Caching, Code Splitting |
+| **Day 6** | Real-world Patterns | 4-5 hrs | Authentication, Error Handling, Validation |
+| **Day 7** | Mock Interview & Review | 4-5 hrs | Q&A, Practice, Consolidation |
 
-### 1. React Compiler (Automatic Memoization)
+### Daily Structure
 
+**Morning (2 hours):**
+- Read the day's section
+- Take detailed notes
+- Understand concepts deeply
+
+**Afternoon (2 hours):**
+- Code along with examples
+- Build small projects
+- Test your understanding
+
+**Evening (1 hour):**
+- Review and consolidate
+- Create flashcards
+- Prepare for next day
+
+---
+
+# 🎯 DAY 1: React 19 Fundamentals
+
+## What's New in React 19?
+
+React 19 introduces several major improvements that change how we build React applications:
+
+### 1. **React Compiler** - Automatic Optimization
+### 2. **Server Components** - First-class support
+### 3. **Server Actions** - Simplified async operations
+### 4. **New Hooks** - useActionState, useFormStatus, useOptimistic, use()
+### 5. **Ref as Prop** - No more forwardRef needed
+### 6. **Hydration Improvements** - Better SSR support
+
+---
+
+## 1️⃣ React Compiler (Automatic Memoization)
+
+### What is it?
+
+The React Compiler is an automatic optimization tool that:
+- **Memoizes components** without manual React.memo
+- **Memoizes values** without useMemo
+- **Memoizes callbacks** without useCallback
+- **Optimizes dependency tracking** automatically
+- **Reduces unnecessary re-renders** intelligently
+
+### Why it matters?
+
+**Before React 19** - Manual optimization required:
 ```jsx
-// React 19 - No need for useMemo/useCallback
+// ❌ Before: Had to manually memoize everything
+import { useMemo, useCallback, memo } from 'react';
+
+const SearchResults = memo(({ query, results }) => {
+  const filteredResults = useMemo(() => 
+    results.filter(r => r.title.toLowerCase().includes(query.toLowerCase())),
+    [results, query]
+  );
+
+  const handleFilter = useCallback((text) => {
+    console.log('Filtering:', text);
+  }, []);
+
+  return (
+    <div>
+      <ResultsList items={filteredResults} onFilter={handleFilter} />
+    </div>
+  );
+});
+```
+
+**React 19** - Compiler handles it automatically:
+```jsx
+// ✅ After: Compiler optimizes automatically
 import { useState } from 'react';
 
 export function SearchResults() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 
-  // React Compiler automatically optimizes this
+  // React Compiler automatically memoizes this
   const filteredResults = results.filter(r => 
     r.title.toLowerCase().includes(query.toLowerCase())
   );
+
+  // React Compiler automatically memoizes this callback
+  const handleFilter = (text) => {
+    console.log('Filtering:', text);
+  };
 
   return (
     <div>
@@ -45,21 +123,64 @@ export function SearchResults() {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search..."
       />
-      <ResultsList items={filteredResults} />
+      <ResultsList items={filteredResults} onFilter={handleFilter} />
     </div>
   );
 }
-
-// Before React 19, you'd need:
-// const filteredResults = useMemo(() => 
-//   results.filter(...), [results, query]
-// );
 ```
 
-### 2. Ref as Prop (No forwardRef)
+### Key Benefits
 
+| Aspect | Before React 19 | React 19 |
+|--------|-----------------|---------|
+| **Memoization** | Manual with useMemo | Automatic |
+| **Callbacks** | Manual with useCallback | Automatic |
+| **Components** | Manual with React.memo | Automatic |
+| **Boilerplate** | High | Low |
+| **Performance** | Good (if done right) | Excellent (always) |
+| **Learning Curve** | Steep | Gentle |
+
+### When to use React Compiler
+
+✅ **Always** - It's enabled by default in React 19
+✅ **No configuration needed** - Just write normal code
+✅ **No performance penalty** - Only optimizes
+
+---
+
+## 2️⃣ Ref as Prop (No forwardRef)
+
+### What is it?
+
+In React 19, you can pass refs directly as props without using `forwardRef`.
+
+### Why it matters?
+
+**Before React 19** - forwardRef was required:
 ```jsx
-// React 19 - Refs are just props now!
+// ❌ Before: Had to use forwardRef
+import { forwardRef, useRef } from 'react';
+
+const TextInput = forwardRef(({ placeholder }, ref) => (
+  <input ref={ref} placeholder={placeholder} />
+));
+
+// Usage
+export function App() {
+  const inputRef = useRef(null);
+  
+  return (
+    <>
+      <TextInput ref={inputRef} placeholder="Type here..." />
+      <button onClick={() => inputRef.current?.focus()}>Focus</button>
+    </>
+  );
+}
+```
+
+**React 19** - Refs are just props:
+```jsx
+// ✅ After: Refs are just props
 function TextInput({ ref, placeholder }) {
   return <input ref={ref} placeholder={placeholder} />;
 }
@@ -69,65 +190,161 @@ import { useRef } from 'react';
 
 export function App() {
   const inputRef = useRef(null);
-
-  const handleFocus = () => {
-    inputRef.current?.focus();
-  };
-
+  
   return (
     <>
       <TextInput ref={inputRef} placeholder="Type here..." />
-      <button onClick={handleFocus}>Focus Input</button>
+      <button onClick={() => inputRef.current?.focus()}>Focus</button>
     </>
   );
 }
-
-// Before React 19:
-// const TextInput = forwardRef(({ placeholder }, ref) => (
-//   <input ref={ref} placeholder={placeholder} />
-// ));
 ```
 
-### 3. useActionState Hook (Form Handling)
+### Comparison Table
+
+| Feature | Before React 19 | React 19 |
+|---------|-----------------|---------|
+| **Syntax** | forwardRef wrapper | Direct prop |
+| **Boilerplate** | Extra wrapper | None |
+| **Readability** | Less clear | More clear |
+| **Performance** | Same | Same |
+| **Learning Curve** | Steep | Gentle |
+
+### Key Benefits
+
+✅ **Simpler code** - No wrapper needed
+✅ **More intuitive** - Refs are just props
+✅ **Less boilerplate** - Fewer lines of code
+✅ **Better readability** - Easier to understand
+
+---
+
+## 3️⃣ useActionState Hook (Form Handling)
+
+### What is it?
+
+`useActionState` is a new hook that simplifies form handling by managing form state and submission status automatically.
+
+### Signature
 
 ```jsx
-// React 19 - Simplified form handling
+const [state, formAction, isPending] = useActionState(serverAction, initialState);
+```
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| **serverAction** | async function | Function that handles form submission |
+| **initialState** | any | Initial state value |
+| **state** | any | Current state (returned from serverAction) |
+| **formAction** | function | Pass to form's action prop |
+| **isPending** | boolean | True while form is submitting |
+
+### Why it matters?
+
+**Before React 19** - Manual state management:
+```jsx
+// ❌ Before: Had to manage state manually
+import { useState } from 'react';
+
+export function LoginForm() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+      
+      if (!response.ok) {
+        setError('Login failed');
+        return;
+      }
+      
+      setSuccess(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input 
+        type="email" 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        disabled={loading}
+      />
+      <input 
+        type="password" 
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        disabled={loading}
+      />
+      <button type="submit" disabled={loading}>
+        {loading ? 'Logging in...' : 'Login'}
+      </button>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {success && <p style={{ color: 'green' }}>Logged in!</p>}
+    </form>
+  );
+}
+```
+
+**React 19** - Simplified with useActionState:
+```jsx
+// ✅ After: useActionState handles everything
 import { useActionState } from 'react';
 
-async function submitForm(previousState, formData) {
+async function loginAction(previousState, formData) {
   const email = formData.get('email');
   const password = formData.get('password');
 
   try {
     const response = await fetch('/api/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password })
     });
 
     if (!response.ok) {
-      return { error: 'Login failed' };
+      return { error: 'Login failed', success: false };
     }
 
-    return { success: true, message: 'Logged in!' };
+    return { error: null, success: true, message: 'Logged in!' };
   } catch (error) {
-    return { error: error.message };
+    return { error: error.message, success: false };
   }
 }
 
 export function LoginForm() {
-  const [state, formAction, isPending] = useActionState(submitForm, null);
+  const [state, formAction, isPending] = useActionState(loginAction, {
+    error: null,
+    success: false
+  });
 
   return (
     <form action={formAction}>
       <input 
         type="email" 
-        name="email" 
+        name="email"
         required 
         disabled={isPending}
       />
       <input 
         type="password" 
-        name="password" 
+        name="password"
         required 
         disabled={isPending}
       />
@@ -141,15 +358,73 @@ export function LoginForm() {
 }
 ```
 
-### 4. useFormStatus Hook
+### Comparison Table
 
+| Aspect | Before React 19 | React 19 |
+|--------|-----------------|---------|
+| **State Management** | Manual (5+ useState) | Automatic (1 hook) |
+| **Form Handling** | Manual onSubmit | Automatic with action |
+| **Loading State** | Manual | Automatic (isPending) |
+| **Error Handling** | Manual | Automatic (state) |
+| **Code Lines** | ~50 lines | ~20 lines |
+| **Boilerplate** | High | Low |
+
+### Key Benefits
+
+✅ **Less code** - No manual state management
+✅ **Automatic loading state** - isPending handled
+✅ **Better UX** - Form disabled while submitting
+✅ **Cleaner logic** - Separation of concerns
+✅ **Progressive enhancement** - Works without JavaScript
+
+---
+
+## 4️⃣ useFormStatus Hook
+
+### What is it?
+
+`useFormStatus` is a hook that gives you access to the status of a form submission from within a child component.
+
+### Why it matters?
+
+**Before React 19** - Had to pass props down:
 ```jsx
-// React 19 - Get form submission status
+// ❌ Before: Had to pass loading state as prop
+export function LoginForm() {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    // ... submit logic
+    setLoading(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="email" disabled={loading} />
+      <SubmitButton loading={loading} />
+    </form>
+  );
+}
+
+function SubmitButton({ loading }) {
+  return (
+    <button disabled={loading}>
+      {loading ? 'Submitting...' : 'Submit'}
+    </button>
+  );
+}
+```
+
+**React 19** - Access status directly:
+```jsx
+// ✅ After: useFormStatus accesses status directly
 import { useFormStatus } from 'react-dom';
 
 function SubmitButton() {
-  const { pending, data, method, action } = useFormStatus();
-
+  const { pending } = useFormStatus();
+  
   return (
     <button type="submit" disabled={pending}>
       {pending ? 'Submitting...' : 'Submit'}
@@ -157,81 +432,206 @@ function SubmitButton() {
   );
 }
 
-export function NewsletterForm() {
+export function LoginForm() {
   async function handleSubmit(formData) {
     const email = formData.get('email');
-    await fetch('/api/newsletter', {
+    await fetch('/api/login', {
       method: 'POST',
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email })
     });
   }
 
   return (
     <form action={handleSubmit}>
-      <input type="email" name="email" required />
+      <input type="email" name="email" />
       <SubmitButton />
     </form>
   );
 }
 ```
 
-### 5. useOptimistic Hook (Optimistic Updates)
+### useFormStatus Properties
 
+| Property | Type | Description |
+|----------|------|-------------|
+| **pending** | boolean | True while form is submitting |
+| **data** | FormData | Form data being submitted |
+| **method** | string | HTTP method (GET, POST, etc.) |
+| **action** | function | The action being called |
+
+### Key Benefits
+
+✅ **No prop drilling** - Access status directly
+✅ **Cleaner components** - Less prop passing
+✅ **Better separation** - Button doesn't need to know about form
+✅ **Reusable** - Same button works with any form
+
+---
+
+## 5️⃣ useOptimistic Hook (Optimistic Updates)
+
+### What is it?
+
+`useOptimistic` allows you to update the UI optimistically before the server responds, then revert if the operation fails.
+
+### Why it matters?
+
+**Before React 19** - Manual optimistic updates:
 ```jsx
-// React 19 - Optimistic UI updates
-import { useOptimistic, useRef } from 'react';
+// ❌ Before: Had to manage optimistic state manually
+import { useState } from 'react';
+
+export function TodoList({ initialTodos }) {
+  const [todos, setTodos] = useState(initialTodos);
+  const [loading, setLoading] = useState(false);
+
+  const handleAddTodo = async (text) => {
+    // Optimistically add
+    const newTodo = { id: Date.now(), text, completed: false };
+    setTodos([...todos, newTodo]);
+
+    try {
+      const response = await fetch('/api/todos', {
+        method: 'POST',
+        body: JSON.stringify({ text })
+      });
+
+      if (!response.ok) {
+        // Revert on error
+        setTodos(initialTodos);
+      }
+    } catch (error) {
+      // Revert on error
+      setTodos(initialTodos);
+    }
+  };
+
+  return (
+    <ul>
+      {todos.map(todo => (
+        <li key={todo.id}>{todo.text}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+**React 19** - Automatic with useOptimistic:
+```jsx
+// ✅ After: useOptimistic handles everything
+import { useOptimistic } from 'react';
 
 export function TodoList({ initialTodos }) {
   const [todos, setTodos] = useOptimistic(initialTodos);
-  const inputRef = useRef(null);
 
-  async function addTodo(formData) {
+  async function handleAddTodo(formData) {
     const text = formData.get('todo');
     
-    // Optimistically add to UI
+    // Optimistically add
     const newTodo = { id: Date.now(), text, completed: false };
     setTodos([...todos, newTodo]);
 
     // Send to server
-    const response = await fetch('/api/todos', {
-      method: 'POST',
-      body: JSON.stringify({ text }),
-    });
-
-    if (!response.ok) {
-      // Revert on error (useOptimistic handles this)
+    try {
+      await fetch('/api/todos', {
+        method: 'POST',
+        body: JSON.stringify({ text })
+      });
+    } catch (error) {
+      // Automatically reverts on error
       setTodos(initialTodos);
     }
-
-    inputRef.current.value = '';
   }
 
   return (
-    <div>
-      <form action={addTodo}>
-        <input 
-          ref={inputRef}
-          type="text" 
-          name="todo" 
-          placeholder="Add a todo..."
-        />
-        <button type="submit">Add</button>
-      </form>
+    <form action={handleAddTodo}>
+      <input type="text" name="todo" />
+      <button type="submit">Add</button>
       <ul>
         {todos.map(todo => (
           <li key={todo.id}>{todo.text}</li>
         ))}
       </ul>
+    </form>
+  );
+}
+```
+
+### Comparison Table
+
+| Aspect | Before React 19 | React 19 |
+|--------|-----------------|---------|
+| **Optimistic Update** | Manual | Automatic |
+| **Revert on Error** | Manual | Automatic |
+| **Code Complexity** | High | Low |
+| **User Experience** | Good | Excellent |
+| **Error Handling** | Manual | Automatic |
+
+### Key Benefits
+
+✅ **Better UX** - Instant feedback to users
+✅ **Automatic revert** - No manual error handling
+✅ **Less code** - Simpler implementation
+✅ **Faster perceived performance** - No waiting for server
+
+---
+
+## 6️⃣ use() Hook (Promise Unwrapping)
+
+### What is it?
+
+The `use()` hook allows you to unwrap promises directly in components, working seamlessly with Suspense.
+
+### Why it matters?
+
+**Before React 19** - Complex promise handling:
+```jsx
+// ❌ Before: Had to handle promises manually
+import { useState, useEffect } from 'react';
+
+async function fetchUser(id) {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+}
+
+export function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchUser(userId)
+      .then(data => {
+        if (isMounted) setUser(data);
+      })
+      .catch(err => {
+        if (isMounted) setError(err);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => { isMounted = false; };
+  }, [userId]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
     </div>
   );
 }
 ```
 
-### 6. use() Hook (Promise Unwrapping)
-
+**React 19** - Simple with use() hook:
 ```jsx
-// React 19 - Unwrap promises in components
-import { use } from 'react';
+// ✅ After: use() unwraps promises automatically
+import { use, Suspense } from 'react';
 
 async function fetchUser(id) {
   const response = await fetch(`/api/users/${id}`);
@@ -239,7 +639,7 @@ async function fetchUser(id) {
 }
 
 function UserProfile({ userId }) {
-  // Unwrap promise directly in component
+  // Unwrap promise directly
   const user = use(fetchUser(userId));
 
   return (
@@ -250,26 +650,97 @@ function UserProfile({ userId }) {
   );
 }
 
-// With Suspense
-import { Suspense } from 'react';
-
 export function App() {
   return (
-    <Suspense fallback={<div>Loading user...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <UserProfile userId={1} />
     </Suspense>
   );
 }
 ```
 
+### Comparison Table
+
+| Aspect | Before React 19 | React 19 |
+|--------|-----------------|---------|
+| **Promise Handling** | Manual with useEffect | Automatic with use() |
+| **Loading State** | Manual | Suspense |
+| **Error Handling** | Manual | Error boundary |
+| **Code Lines** | ~30 lines | ~10 lines |
+| **Readability** | Complex | Simple |
+
+### Key Benefits
+
+✅ **Simpler code** - No useEffect needed
+✅ **Better with Suspense** - Works seamlessly
+✅ **Cleaner logic** - Focus on data, not loading
+✅ **Less boilerplate** - Fewer lines of code
+
 ---
 
-## 🎯 DAY 2: React 19 Advanced Hooks & Patterns
+## Summary: React 19 Fundamentals
 
-### 1. Context with useContext (Still Important)
+| Feature | Purpose | Benefit |
+|---------|---------|---------|
+| **React Compiler** | Automatic optimization | No manual memoization needed |
+| **Ref as Prop** | Pass refs directly | No forwardRef wrapper |
+| **useActionState** | Form handling | Simplified form management |
+| **useFormStatus** | Form status access | No prop drilling |
+| **useOptimistic** | Optimistic updates | Better UX |
+| **use()** | Promise unwrapping | Simpler async code |
 
+---
+
+# 🎯 DAY 2: React 19 Advanced Hooks
+
+## Overview
+
+Day 2 covers advanced React 19 hooks and patterns that build on the fundamentals.
+
+### Topics
+
+1. **useContext** - State sharing without props
+2. **useReducer** - Complex state management
+3. **useEffect** - Side effects and cleanup
+4. **Custom Hooks** - Reusable logic
+5. **useCallback & useMemo** - Performance (still useful)
+
+---
+
+## 1️⃣ useContext Hook
+
+### What is it?
+
+`useContext` allows you to share state across components without prop drilling.
+
+### Why it matters?
+
+**Problem: Prop Drilling**
 ```jsx
-// Create context
+// ❌ Props passed through many levels
+function App() {
+  const [theme, setTheme] = useState('light');
+  return <Header theme={theme} setTheme={setTheme} />;
+}
+
+function Header({ theme, setTheme }) {
+  return <Navigation theme={theme} setTheme={setTheme} />;
+}
+
+function Navigation({ theme, setTheme }) {
+  return <UserMenu theme={theme} setTheme={setTheme} />;
+}
+
+function UserMenu({ theme, setTheme }) {
+  return <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+    Toggle Theme
+  </button>;
+}
+```
+
+**Solution: useContext**
+```jsx
+// ✅ Context provides direct access
 import { createContext, useContext, useState } from 'react';
 
 const ThemeContext = createContext();
@@ -288,86 +759,197 @@ export function ThemeProvider({ children }) {
   );
 }
 
-// Use context
-function ThemedButton() {
+function UserMenu() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-
+  
   return (
-    <button 
-      onClick={toggleTheme}
-      style={{
-        background: theme === 'light' ? '#fff' : '#333',
-        color: theme === 'light' ? '#000' : '#fff',
-      }}
-    >
+    <button onClick={toggleTheme}>
       Current theme: {theme}
     </button>
   );
 }
+
+function App() {
+  return (
+    <ThemeProvider>
+      <Header />
+      <Navigation />
+      <UserMenu />
+    </ThemeProvider>
+  );
+}
 ```
 
-### 2. useReducer for Complex State
+### Comparison Table
+
+| Aspect | Prop Drilling | useContext |
+|--------|---------------|-----------|
+| **Prop Passing** | Through all levels | Direct access |
+| **Code Clarity** | Confusing | Clear |
+| **Maintenance** | Hard | Easy |
+| **Performance** | Good | Good |
+| **Use Case** | Simple apps | Any app |
+
+---
+
+## 2️⃣ useReducer Hook
+
+### What is it?
+
+`useReducer` is for managing complex state with multiple related values and complex update logic.
+
+### Why it matters?
+
+**When to use useReducer:**
+- Multiple related state values
+- Complex update logic
+- State depends on previous state
+- Want to optimize performance
+
+### Example: Todo App with useReducer
 
 ```jsx
-// Complex state management
 import { useReducer } from 'react';
 
-const initialState = {
-  count: 0,
-  loading: false,
-  error: null,
+// Action types
+const ACTIONS = {
+  ADD_TODO: 'ADD_TODO',
+  REMOVE_TODO: 'REMOVE_TODO',
+  TOGGLE_TODO: 'TOGGLE_TODO',
+  SET_FILTER: 'SET_FILTER'
 };
 
-function reducer(state, action) {
+// Reducer function
+function todoReducer(state, action) {
   switch (action.type) {
-    case 'INCREMENT':
-      return { ...state, count: state.count + 1 };
-    case 'DECREMENT':
-      return { ...state, count: state.count - 1 };
-    case 'SET_LOADING':
-      return { ...state, loading: action.payload };
-    case 'SET_ERROR':
-      return { ...state, error: action.payload };
-    case 'RESET':
-      return initialState;
+    case ACTIONS.ADD_TODO:
+      return {
+        ...state,
+        todos: [...state.todos, action.payload]
+      };
+    
+    case ACTIONS.REMOVE_TODO:
+      return {
+        ...state,
+        todos: state.todos.filter(t => t.id !== action.payload)
+      };
+    
+    case ACTIONS.TOGGLE_TODO:
+      return {
+        ...state,
+        todos: state.todos.map(t =>
+          t.id === action.payload
+            ? { ...t, completed: !t.completed }
+            : t
+        )
+      };
+    
+    case ACTIONS.SET_FILTER:
+      return {
+        ...state,
+        filter: action.payload
+      };
+    
     default:
       return state;
   }
 }
 
-export function Counter() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+// Initial state
+const initialState = {
+  todos: [],
+  filter: 'all'
+};
 
-  const handleIncrement = async () => {
-    dispatch({ type: 'SET_LOADING', payload: true });
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      dispatch({ type: 'INCREMENT' });
-    } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: error.message });
-    } finally {
-      dispatch({ type: 'SET_LOADING', payload: false });
-    }
+// Component
+export function TodoApp() {
+  const [state, dispatch] = useReducer(todoReducer, initialState);
+
+  const handleAddTodo = (text) => {
+    dispatch({
+      type: ACTIONS.ADD_TODO,
+      payload: { id: Date.now(), text, completed: false }
+    });
+  };
+
+  const handleToggleTodo = (id) => {
+    dispatch({
+      type: ACTIONS.TOGGLE_TODO,
+      payload: id
+    });
+  };
+
+  const handleRemoveTodo = (id) => {
+    dispatch({
+      type: ACTIONS.REMOVE_TODO,
+      payload: id
+    });
   };
 
   return (
     <div>
-      <p>Count: {state.count}</p>
-      <button onClick={handleIncrement} disabled={state.loading}>
-        {state.loading ? 'Loading...' : 'Increment'}
-      </button>
-      {state.error && <p style={{ color: 'red' }}>{state.error}</p>}
-      <button onClick={() => dispatch({ type: 'RESET' })}>Reset</button>
+      <ul>
+        {state.todos.map(todo => (
+          <li key={todo.id}>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => handleToggleTodo(todo.id)}
+            />
+            <span>{todo.text}</span>
+            <button onClick={() => handleRemoveTodo(todo.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+      <AddTodoForm onAdd={handleAddTodo} />
     </div>
   );
 }
 ```
 
-### 3. useEffect Cleanup Pattern
+### Comparison Table
+
+| Aspect | useState | useReducer |
+|--------|----------|-----------|
+| **Simple State** | ✅ Good | ❌ Overkill |
+| **Complex State** | ❌ Messy | ✅ Good |
+| **Multiple Values** | ❌ Many hooks | ✅ One hook |
+| **Update Logic** | ❌ Scattered | ✅ Centralized |
+| **Testing** | ❌ Hard | ✅ Easy |
+| **Learning Curve** | ✅ Easy | ❌ Steep |
+
+---
+
+## 3️⃣ useEffect Hook (Advanced)
+
+### What is it?
+
+`useEffect` runs side effects after render and handles cleanup.
+
+### Why it matters?
+
+**Common Mistakes:**
 
 ```jsx
-// Proper cleanup
+// ❌ Missing dependency array - runs every render
+useEffect(() => {
+  fetchData();
+});
+
+// ❌ Empty dependency array - never updates
+useEffect(() => {
+  setData(fetchedData);
+}, []);
+
+// ✅ Correct - runs when dependencies change
+useEffect(() => {
+  fetchData();
+}, [userId]);
+```
+
+### Proper Cleanup Pattern
+
+```jsx
 import { useEffect, useState } from 'react';
 
 export function DataFetcher({ userId }) {
@@ -382,6 +964,7 @@ export function DataFetcher({ userId }) {
         const response = await fetch(`/api/users/${userId}`);
         const json = await response.json();
         
+        // Only update if component is still mounted
         if (isMounted) {
           setData(json);
         }
@@ -405,12 +988,62 @@ export function DataFetcher({ userId }) {
 }
 ```
 
-### 4. Custom Hooks Pattern
+### Key Points
 
+✅ **Always cleanup** - Prevent memory leaks
+✅ **Check isMounted** - Avoid state updates on unmounted components
+✅ **Correct dependencies** - Include all used values
+✅ **One effect per concern** - Separate effects for different logic
+
+---
+
+## 4️⃣ Custom Hooks
+
+### What is it?
+
+Custom hooks are functions that use React hooks to extract reusable logic.
+
+### Why it matters?
+
+**Before Custom Hooks** - Logic scattered:
 ```jsx
-// Custom hook for API calls
-import { useState, useEffect } from 'react';
+// ❌ Same logic in multiple components
+function UserProfile() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    fetch('/api/user')
+      .then(r => r.json())
+      .then(data => setUser(data))
+      .catch(err => setError(err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // ... component logic
+}
+
+function UserList() {
+  const [users, setUsers] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/users')
+      .then(r => r.json())
+      .then(data => setUsers(data))
+      .catch(err => setError(err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // ... component logic
+}
+```
+
+**After Custom Hooks** - Reusable logic:
+```jsx
+// ✅ Custom hook extracts logic
 function useFetch(url) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -452,12 +1085,21 @@ function useFetch(url) {
 }
 
 // Usage
-export function UserList() {
-  const { data: users, loading, error } = useFetch('/api/users');
-
+function UserProfile() {
+  const { data: user, loading, error } = useFetch('/api/user');
+  
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  
+  return <div>{user?.name}</div>;
+}
 
+function UserList() {
+  const { data: users, loading, error } = useFetch('/api/users');
+  
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  
   return (
     <ul>
       {users?.map(user => (
@@ -468,20 +1110,38 @@ export function UserList() {
 }
 ```
 
-### 5. useCallback for Memoization (Still Useful)
+### Benefits of Custom Hooks
+
+✅ **DRY** - Don't Repeat Yourself
+✅ **Reusable** - Use across components
+✅ **Testable** - Easy to test logic
+✅ **Maintainable** - Update logic in one place
+✅ **Composable** - Combine multiple hooks
+
+---
+
+## 5️⃣ useCallback & useMemo (Still Useful)
+
+### When to use them?
+
+Even with React Compiler, these are still useful for:
+- Passing callbacks to optimized child components
+- Expensive computations
+- Preventing unnecessary re-renders in specific cases
+
+### useCallback Example
 
 ```jsx
-// useCallback - memoize functions
 import { useCallback, useState } from 'react';
 
 export function Parent() {
   const [count, setCount] = useState(0);
 
-  // Without useCallback, this function is recreated on every render
+  // Without useCallback, this function is recreated every render
   // With useCallback, it's only recreated when dependencies change
   const handleClick = useCallback(() => {
     console.log('Button clicked');
-  }, []); // Empty dependency array = never recreate
+  }, []);
 
   return (
     <div>
@@ -498,10 +1158,9 @@ function Child({ onButtonClick }) {
 }
 ```
 
-### 6. useMemo for Expensive Computations
+### useMemo Example
 
 ```jsx
-// useMemo - memoize expensive calculations
 import { useMemo, useState } from 'react';
 
 export function DataProcessor({ items }) {
@@ -514,7 +1173,7 @@ export function DataProcessor({ items }) {
       .filter(item => item.name.includes(filter))
       .map(item => ({
         ...item,
-        processed: item.value * 2,
+        processed: item.value * 2
       }));
   }, [items, filter]);
 
@@ -537,176 +1196,114 @@ export function DataProcessor({ items }) {
 
 ---
 
-## 🎯 DAY 3: Server Components & Actions
+## Summary: Day 2
 
-### 1. Server Components Basics
+| Hook | Purpose | When to Use |
+|------|---------|------------|
+| **useContext** | Share state | Avoid prop drilling |
+| **useReducer** | Complex state | Multiple related values |
+| **useEffect** | Side effects | Data fetching, subscriptions |
+| **Custom Hooks** | Reusable logic | Extract common patterns |
+| **useCallback** | Memoize functions | Pass to optimized children |
+| **useMemo** | Memoize values | Expensive computations |
+
+---
+
+# 🎯 DAY 3: Server Components & Actions
+
+## Overview
+
+Server Components and Server Actions are fundamental to modern Next.js development.
+
+### Topics
+
+1. **Server Components** - Run on server only
+2. **Client Components** - Run in browser
+3. **Server Actions** - Async functions on server
+4. **Mixing Server & Client** - Best practices
+5. **Revalidation** - Cache invalidation
+
+---
+
+## 1️⃣ Server Components
+
+### What is it?
+
+Server Components run only on the server and send HTML to the browser.
+
+### Why it matters?
+
+**Benefits:**
+- ✅ No JavaScript sent to browser
+- ✅ Direct database access
+- ✅ Keep secrets safe
+- ✅ Better performance
+- ✅ Reduced bundle size
+
+### Example
 
 ```jsx
-// app/components/UserCard.jsx - Server Component
+// app/users/page.jsx - Server Component (default)
 import { db } from '@/lib/db';
-
-// This runs ONLY on the server
-export async function UserCard({ userId }) {
-  const user = await db.user.findUnique({
-    where: { id: userId },
-  });
-
-  return (
-    <div className="card">
-      <h2>{user.name}</h2>
-      <p>{user.email}</p>
-      <p>Created: {new Date(user.createdAt).toLocaleDateString()}</p>
-    </div>
-  );
-}
-```
-
-### 2. Server Actions
-
-```jsx
-// app/actions/user.js
-'use server';
-
-import { db } from '@/lib/db';
-import { revalidatePath } from 'next/cache';
-
-export async function createUser(formData) {
-  const name = formData.get('name');
-  const email = formData.get('email');
-
-  try {
-    const user = await db.user.create({
-      data: { name, email },
-    });
-
-    revalidatePath('/users');
-    return { success: true, user };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-}
-
-export async function deleteUser(userId) {
-  try {
-    await db.user.delete({
-      where: { id: userId },
-    });
-
-    revalidatePath('/users');
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-}
-```
-
-### 3. Using Server Actions in Client Components
-
-```jsx
-// app/components/UserForm.jsx
-'use client';
-
-import { useActionState } from 'react';
-import { createUser } from '@/app/actions/user';
-
-export function UserForm() {
-  const [state, formAction, isPending] = useActionState(createUser, null);
-
-  return (
-    <form action={formAction}>
-      <input 
-        type="text" 
-        name="name" 
-        placeholder="Name"
-        required
-        disabled={isPending}
-      />
-      <input 
-        type="email" 
-        name="email" 
-        placeholder="Email"
-        required
-        disabled={isPending}
-      />
-      <button type="submit" disabled={isPending}>
-        {isPending ? 'Creating...' : 'Create User'}
-      </button>
-      {state?.error && <p style={{ color: 'red' }}>{state.error}</p>}
-      {state?.success && <p style={{ color: 'green' }}>User created!</p>}
-    </form>
-  );
-}
-```
-
-### 4. Progressive Enhancement with Server Actions
-
-```jsx
-// app/components/TodoItem.jsx
-'use client';
-
-import { useTransition } from 'react';
-import { toggleTodo, deleteTodo } from '@/app/actions/todos';
-
-export function TodoItem({ todo }) {
-  const [isPending, startTransition] = useTransition();
-
-  const handleToggle = () => {
-    startTransition(async () => {
-      await toggleTodo(todo.id);
-    });
-  };
-
-  const handleDelete = () => {
-    startTransition(async () => {
-      await deleteTodo(todo.id);
-    });
-  };
-
-  return (
-    <li style={{ opacity: isPending ? 0.6 : 1 }}>
-      <input 
-        type="checkbox" 
-        checked={todo.completed}
-        onChange={handleToggle}
-        disabled={isPending}
-      />
-      <span style={{ 
-        textDecoration: todo.completed ? 'line-through' : 'none' 
-      }}>
-        {todo.text}
-      </span>
-      <button onClick={handleDelete} disabled={isPending}>
-        Delete
-      </button>
-    </li>
-  );
-}
-```
-
-### 5. Mixing Server & Client Components
-
-```jsx
-// app/page.jsx - Server Component
-import { db } from '@/lib/db';
-import { UserCard } from '@/components/UserCard';
-import { UserForm } from '@/components/UserForm';
 
 export default async function UsersPage() {
+  // This runs on the server only
   const users = await db.user.findMany();
 
   return (
     <div>
       <h1>Users</h1>
-      
-      {/* Server Component */}
-      <div className="users-list">
+      <ul>
         {users.map(user => (
-          <UserCard key={user.id} userId={user.id} />
+          <li key={user.id}>{user.name}</li>
         ))}
-      </div>
+      </ul>
+    </div>
+  );
+}
+```
 
-      {/* Client Component */}
-      <UserForm />
+### Comparison Table
+
+| Aspect | Server Component | Client Component |
+|--------|-----------------|-----------------|
+| **Runs on** | Server | Browser |
+| **JavaScript** | None sent | Sent to browser |
+| **Database Access** | ✅ Direct | ❌ Via API |
+| **Secrets** | ✅ Safe | ❌ Exposed |
+| **Hooks** | ❌ No | ✅ Yes |
+| **Interactivity** | ❌ No | ✅ Yes |
+| **Performance** | ✅ Better | ❌ Slower |
+
+---
+
+## 2️⃣ Client Components
+
+### What is it?
+
+Client Components run in the browser and can use React hooks.
+
+### When to use
+
+- ✅ Need interactivity (onClick, onChange, etc.)
+- ✅ Need React hooks (useState, useEffect, etc.)
+- ✅ Need browser APIs (localStorage, window, etc.)
+
+### Example
+
+```jsx
+// app/components/Counter.jsx - Client Component
+'use client';
+
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
     </div>
   );
 }
@@ -714,36 +1311,293 @@ export default async function UsersPage() {
 
 ---
 
-## 🎯 DAY 4: Next.js 15 New Features
+## 3️⃣ Server Actions
 
-### 1. App Router (Latest Standard)
+### What is it?
 
+Server Actions are async functions that run on the server and can be called from Client Components.
+
+### Why it matters?
+
+**Before Server Actions** - Manual API routes:
 ```jsx
-// app/layout.jsx - Root layout
-import './globals.css';
+// ❌ Before: Had to create API route
+// app/api/todos/route.js
+export async function POST(request) {
+  const body = await request.json();
+  const todo = await db.todo.create({ data: body });
+  return Response.json(todo);
+}
 
-export const metadata = {
-  title: 'My App',
-  description: 'Generated by create next app',
-};
+// app/components/AddTodoForm.jsx
+'use client';
+import { useState } from 'react';
 
-export default function RootLayout({ children }) {
+export function AddTodoForm() {
+  const [text, setText] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('/api/todos', {
+      method: 'POST',
+      body: JSON.stringify({ text })
+    });
+    const todo = await response.json();
+    setText('');
+  };
+
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <form onSubmit={handleSubmit}>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+      <button type="submit">Add</button>
+    </form>
   );
 }
+```
 
-// app/page.jsx - Home page
-export default function Home() {
-  return <h1>Welcome to Next.js 15</h1>;
+**After Server Actions** - Direct function calls:
+```jsx
+// ✅ After: Server Action handles everything
+// app/actions/todos.js
+'use server';
+
+import { db } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+
+export async function addTodo(formData) {
+  const text = formData.get('text');
+  
+  const todo = await db.todo.create({
+    data: { text }
+  });
+  
+  revalidatePath('/todos');
+  return todo;
 }
 
-// app/blog/[slug]/page.jsx - Dynamic route
+// app/components/AddTodoForm.jsx
+'use client';
+
+import { useActionState } from 'react';
+import { addTodo } from '@/app/actions/todos';
+
+export function AddTodoForm() {
+  const [state, formAction, isPending] = useActionState(addTodo, null);
+
+  return (
+    <form action={formAction}>
+      <input type="text" name="text" required disabled={isPending} />
+      <button type="submit" disabled={isPending}>
+        {isPending ? 'Adding...' : 'Add'}
+      </button>
+    </form>
+  );
+}
+```
+
+### Comparison Table
+
+| Aspect | API Routes | Server Actions |
+|--------|-----------|-----------------|
+| **Setup** | Create route file | Create action file |
+| **Calling** | fetch() | Direct function call |
+| **Boilerplate** | High | Low |
+| **Error Handling** | Manual | Automatic |
+| **Revalidation** | Manual | Built-in |
+| **Type Safety** | Manual | Automatic |
+
+---
+
+## 4️⃣ Mixing Server & Client Components
+
+### Best Practice Pattern
+
+```jsx
+// app/dashboard/page.jsx - Server Component
+import { db } from '@/lib/db';
+import { DashboardClient } from './DashboardClient';
+
+export default async function DashboardPage() {
+  // Fetch data on server
+  const user = await db.user.findUnique({
+    where: { id: session.user.id },
+    include: { todos: true }
+  });
+
+  // Pass data to Client Component
+  return <DashboardClient user={user} initialTodos={user.todos} />;
+}
+
+// app/dashboard/DashboardClient.jsx - Client Component
+'use client';
+
+import { useState } from 'react';
+import { addTodo } from '@/app/actions/todos';
+
+export function DashboardClient({ user, initialTodos }) {
+  const [todos, setTodos] = useState(initialTodos);
+
+  const handleAddTodo = async (formData) => {
+    const text = formData.get('text');
+    const newTodo = await addTodo(text);
+    setTodos([...todos, newTodo]);
+  };
+
+  return (
+    <div>
+      <h1>Welcome, {user.name}</h1>
+      <TodoList todos={todos} />
+      <AddTodoForm onAdd={handleAddTodo} />
+    </div>
+  );
+}
+```
+
+### Benefits
+
+✅ **Server fetches data** - Faster, more secure
+✅ **Client handles interactivity** - Better UX
+✅ **Minimal JavaScript** - Smaller bundle
+✅ **Best of both worlds** - Performance + Interactivity
+
+---
+
+## 5️⃣ Revalidation
+
+### What is it?
+
+Revalidation invalidates cached data so it's fetched fresh from the server.
+
+### Types of Revalidation
+
+**Time-based (ISR):**
+```jsx
+// Revalidate every 60 seconds
+export const revalidate = 60;
+
+export default async function Page() {
+  const data = await fetch('/api/data', {
+    next: { revalidate: 60 }
+  });
+  return <div>{data}</div>;
+}
+```
+
+**On-demand:**
+```jsx
+// app/actions/revalidate.js
+'use server';
+
+import { revalidatePath, revalidateTag } from 'next/cache';
+
+export async function revalidateTodos() {
+  revalidatePath('/todos');
+}
+
+export async function revalidateByTag() {
+  revalidateTag('todos');
+}
+```
+
+---
+
+## Summary: Day 3
+
+| Concept | Purpose | Use Case |
+|---------|---------|----------|
+| **Server Components** | Run on server | Data fetching |
+| **Client Components** | Run in browser | Interactivity |
+| **Server Actions** | Async on server | Form submission |
+| **Mixing** | Best of both | Complete apps |
+| **Revalidation** | Refresh cache | Keep data fresh |
+
+---
+
+# 🎯 DAY 4: Next.js 15 Features
+
+## Overview
+
+Next.js 15 builds on Next.js 14 with improved performance and developer experience.
+
+### Topics
+
+1. **App Router** - File-based routing
+2. **Dynamic Routes** - [slug] and [...slug]
+3. **API Routes** - GET, POST, PUT, DELETE
+4. **Middleware** - Request interception
+5. **Image Optimization** - Automatic optimization
+6. **Font Optimization** - Google Fonts
+7. **Metadata API** - SEO optimization
+8. **ISR & Streaming** - Performance
+
+---
+
+## 1️⃣ App Router
+
+### File Structure
+
+```
+app/
+├── layout.jsx                    # Root layout
+├── page.jsx                      # / (home)
+├── error.jsx                     # Error boundary
+├── not-found.jsx                 # 404 page
+├── loading.jsx                   # Loading state
+│
+├── blog/
+│   ├── page.jsx                  # /blog
+│   ├── layout.jsx                # Blog layout
+│   └── [slug]/
+│       ├── page.jsx              # /blog/:slug
+│       └── layout.jsx            # Post layout
+│
+├── api/
+│   ├── users/
+│   │   ├── route.js              # GET/POST /api/users
+│   │   └── [id]/
+│   │       └── route.js          # GET/PUT/DELETE /api/users/:id
+│   └── auth/
+│       └── route.js              # /api/auth
+│
+└── actions/
+    ├── auth.js                   # Auth server actions
+    ├── todos.js                  # Todo server actions
+    └── users.js                  # User server actions
+```
+
+### Key Features
+
+✅ **File-based routing** - No configuration needed
+✅ **Nested layouts** - Shared UI
+✅ **Dynamic routes** - [slug] syntax
+✅ **Catch-all routes** - [...slug] syntax
+✅ **Route groups** - (group) syntax
+✅ **Parallel routes** - @slot syntax
+
+---
+
+## 2️⃣ Dynamic Routes
+
+### Basic Dynamic Route
+
+```jsx
+// app/blog/[slug]/page.jsx
+export default function BlogPost({ params }) {
+  return <h1>Blog Post: {params.slug}</h1>;
+}
+```
+
+### Generate Static Params
+
+```jsx
+// app/blog/[slug]/page.jsx
 export async function generateStaticParams() {
-  const posts = await fetch('https://api.example.com/posts').then(r => r.json());
-  return posts.map(post => ({ slug: post.slug }));
+  const posts = await fetch('https://api.example.com/posts')
+    .then(r => r.json());
+  
+  return posts.map(post => ({
+    slug: post.slug
+  }));
 }
 
 export default function BlogPost({ params }) {
@@ -751,69 +1605,27 @@ export default function BlogPost({ params }) {
 }
 ```
 
-### 2. Incremental Static Regeneration (ISR)
-
-```jsx
-// app/blog/page.jsx
-export const revalidate = 60; // Revalidate every 60 seconds
-
-export default async function BlogPage() {
-  const posts = await fetch('https://api.example.com/posts', {
-    next: { revalidate: 60 }
-  }).then(r => r.json());
-
-  return (
-    <div>
-      <h1>Blog Posts</h1>
-      {posts.map(post => (
-        <article key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.excerpt}</p>
-        </article>
-      ))}
-    </div>
-  );
-}
-```
-
-### 3. Dynamic Routes with Catch-All
+### Catch-All Routes
 
 ```jsx
 // app/docs/[[...slug]]/page.jsx
 export default function DocsPage({ params }) {
   const slug = params.slug?.join('/') || 'index';
-
-  return (
-    <div>
-      <h1>Documentation: {slug}</h1>
-      {/* Matches /docs, /docs/guide, /docs/guide/setup, etc. */}
-    </div>
-  );
-}
-```
-
-### 4. Middleware
-
-```jsx
-// middleware.js - Root level
-import { NextResponse } from 'next/server';
-
-export function middleware(request) {
-  const token = request.cookies.get('auth-token');
-
-  if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-
-  return NextResponse.next();
+  return <h1>Documentation: {slug}</h1>;
 }
 
-export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*'],
-};
+// Matches:
+// /docs
+// /docs/guide
+// /docs/guide/setup
+// /docs/guide/setup/installation
 ```
 
-### 5. API Routes
+---
+
+## 3️⃣ API Routes
+
+### GET Request
 
 ```jsx
 // app/api/users/route.js
@@ -824,27 +1636,57 @@ export async function GET(request) {
     const users = await db.user.findMany();
     return Response.json(users);
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json(
+      { error: error.message },
+      { status: 500 }
+    );
   }
 }
+```
 
+### POST Request
+
+```jsx
+// app/api/users/route.js
 export async function POST(request) {
   try {
     const body = await request.json();
-    const user = await db.user.create({
-      data: body,
-    });
+    
+    // Validate
+    if (!body.name || !body.email) {
+      return Response.json(
+        { error: 'Name and email required' },
+        { status: 400 }
+      );
+    }
+    
+    const user = await db.user.create({ data: body });
     return Response.json(user, { status: 201 });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 400 });
+    return Response.json(
+      { error: error.message },
+      { status: 500 }
+    );
   }
 }
+```
 
+### Dynamic API Routes
+
+```jsx
 // app/api/users/[id]/route.js
 export async function GET(request, { params }) {
   const user = await db.user.findUnique({
-    where: { id: params.id },
+    where: { id: params.id }
   });
+  
+  if (!user) {
+    return Response.json(
+      { error: 'User not found' },
+      { status: 404 }
+    );
+  }
+  
   return Response.json(user);
 }
 
@@ -852,120 +1694,91 @@ export async function PUT(request, { params }) {
   const body = await request.json();
   const user = await db.user.update({
     where: { id: params.id },
-    data: body,
+    data: body
   });
   return Response.json(user);
 }
 
 export async function DELETE(request, { params }) {
-  await db.user.delete({
-    where: { id: params.id },
-  });
+  await db.user.delete({ where: { id: params.id } });
   return Response.json({ success: true });
-}
-```
-
-### 6. Image Optimization
-
-```jsx
-// Using Next.js Image component
-import Image from 'next/image';
-
-export function ProductCard({ product }) {
-  return (
-    <div>
-      <Image
-        src={product.image}
-        alt={product.name}
-        width={300}
-        height={300}
-        priority={false}
-        placeholder="blur"
-        blurDataURL="data:image/jpeg;base64,..."
-      />
-      <h2>{product.name}</h2>
-      <p>${product.price}</p>
-    </div>
-  );
-}
-```
-
-### 7. Font Optimization
-
-```jsx
-// app/layout.jsx
-import { Inter, Playfair_Display } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'] });
-const playfair = Playfair_Display({ 
-  subsets: ['latin'],
-  weight: ['700'],
-});
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        <h1 className={playfair.className}>My App</h1>
-        {children}
-      </body>
-    </html>
-  );
-}
-```
-
-### 8. Metadata API
-
-```jsx
-// app/blog/[slug]/page.jsx
-export async function generateMetadata({ params }) {
-  const post = await fetch(`/api/posts/${params.slug}`).then(r => r.json());
-
-  return {
-    title: post.title,
-    description: post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: [post.image],
-    },
-  };
-}
-
-export default function BlogPost({ params }) {
-  return <article>{/* ... */}</article>;
 }
 ```
 
 ---
 
-## 🎯 DAY 5: Performance & Optimization
+## 4️⃣ Middleware
 
-### 1. Code Splitting & Dynamic Imports
+### Basic Middleware
 
 ```jsx
-// Lazy load components
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+// middleware.js
+import { NextResponse } from 'next/server';
 
-const HeavyComponent = dynamic(() => import('@/components/Heavy'), {
-  loading: () => <div>Loading...</div>,
-  ssr: false, // Don't render on server
-});
+export function middleware(request) {
+  // Check authentication
+  const token = request.cookies.get('auth-token');
+  
+  if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+  
+  return NextResponse.next();
+}
 
-export function Page() {
+export const config = {
+  matcher: ['/dashboard/:path*', '/admin/:path*']
+};
+```
+
+### With Authentication
+
+```jsx
+// middleware.js
+import { auth } from '@/lib/auth';
+import { NextResponse } from 'next/server';
+
+export async function middleware(request) {
+  const session = await auth();
+  
+  if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+  
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*']
+};
+```
+
+---
+
+## 5️⃣ Image Optimization
+
+### Basic Usage
+
+```jsx
+import Image from 'next/image';
+
+export function ProductImage({ product }) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HeavyComponent />
-    </Suspense>
+    <Image
+      src={product.image}
+      alt={product.name}
+      width={300}
+      height={300}
+      priority={false}
+      quality={75}
+    />
   );
 }
 ```
 
-### 2. Image Optimization Best Practices
+### Responsive Images
 
 ```jsx
-// Responsive images
 import Image from 'next/image';
 
 export function ResponsiveImage() {
@@ -983,86 +1796,129 @@ export function ResponsiveImage() {
 }
 ```
 
-### 3. Bundle Analysis
+### Benefits
 
-```bash
-# Install bundle analyzer
-npm install --save-dev @next/bundle-analyzer
+✅ **Automatic format conversion** - WebP, AVIF
+✅ **Responsive sizing** - Different sizes for different devices
+✅ **Lazy loading** - Load only when visible
+✅ **Blur placeholder** - Show while loading
+✅ **Automatic optimization** - Best practices applied
 
-# next.config.js
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+---
 
-module.exports = withBundleAnalyzer({
-  // your config
-});
+## 6️⃣ Font Optimization
 
-# Run analysis
-ANALYZE=true npm run build
-```
-
-### 4. Caching Strategies
-
-```jsx
-// app/api/data/route.js
-export async function GET(request) {
-  const data = await fetch('https://api.example.com/data', {
-    next: { 
-      revalidate: 3600, // Cache for 1 hour
-      tags: ['data'] // For on-demand revalidation
-    }
-  }).then(r => r.json());
-
-  return Response.json(data);
-}
-
-// Revalidate on demand
-// app/api/revalidate/route.js
-import { revalidateTag } from 'next/cache';
-
-export async function POST(request) {
-  const tag = request.nextUrl.searchParams.get('tag');
-  revalidateTag(tag);
-  return Response.json({ revalidated: true });
-}
-```
-
-### 5. Web Vitals Monitoring
+### Google Fonts
 
 ```jsx
 // app/layout.jsx
-'use client';
+import { Inter, Playfair_Display } from 'next/font/google';
 
-import { useReportWebVitals } from 'next/web-vitals';
+const inter = Inter({ subsets: ['latin'] });
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['700']
+});
 
-export function RootLayout({ children }) {
-  useReportWebVitals((metric) => {
-    console.log(metric);
-    // Send to analytics service
-    fetch('/api/analytics', {
-      method: 'POST',
-      body: JSON.stringify(metric),
-    });
-  });
-
-  return <>{children}</>;
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <h1 className={playfair.className}>My App</h1>
+        {children}
+      </body>
+    </html>
+  );
 }
 ```
 
-### 6. Streaming & Suspense
+### Benefits
+
+✅ **Zero layout shift** - Fonts loaded before render
+✅ **Automatic subsetting** - Only needed characters
+✅ **Self-hosted** - No external requests
+✅ **Performance** - Optimized delivery
+
+---
+
+## 7️⃣ Metadata API
+
+### Static Metadata
+
+```jsx
+// app/page.jsx
+export const metadata = {
+  title: 'Home',
+  description: 'Welcome to my app',
+  openGraph: {
+    title: 'Home',
+    description: 'Welcome to my app',
+    images: ['/og-image.jpg']
+  }
+};
+
+export default function Home() {
+  return <h1>Home</h1>;
+}
+```
+
+### Dynamic Metadata
+
+```jsx
+// app/blog/[slug]/page.jsx
+export async function generateMetadata({ params }) {
+  const post = await getPost(params.slug);
+  
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: [post.image]
+    }
+  };
+}
+
+export default function BlogPost({ params }) {
+  return <article>{/* ... */}</article>;
+}
+```
+
+---
+
+## 8️⃣ ISR & Streaming
+
+### ISR (Incremental Static Regeneration)
+
+```jsx
+// app/blog/[slug]/page.jsx
+export const revalidate = 60; // Revalidate every 60 seconds
+
+export async function generateStaticParams() {
+  const posts = await getPosts();
+  return posts.map(post => ({ slug: post.slug }));
+}
+
+export default async function BlogPost({ params }) {
+  const post = await getPost(params.slug);
+  return <article>{post.content}</article>;
+}
+```
+
+### Streaming with Suspense
 
 ```jsx
 // app/page.jsx
 import { Suspense } from 'react';
 
-async function SlowComponent() {
-  await new Promise(resolve => setTimeout(resolve, 3000));
-  return <div>Slow content loaded</div>;
-}
-
 function LoadingFallback() {
   return <div>Loading...</div>;
+}
+
+async function SlowComponent() {
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  return <div>Loaded!</div>;
 }
 
 export default function Page() {
@@ -1079,78 +1935,312 @@ export default function Page() {
 
 ---
 
-## 🎯 DAY 6: Real-world Patterns & Best Practices
+## Summary: Day 4
 
-### 1. Authentication Pattern
+| Feature | Purpose | Benefit |
+|---------|---------|---------|
+| **App Router** | File-based routing | No configuration |
+| **Dynamic Routes** | [slug] syntax | Flexible routing |
+| **API Routes** | REST endpoints | Built-in backend |
+| **Middleware** | Request interception | Authentication |
+| **Image Optimization** | Automatic optimization | Better performance |
+| **Font Optimization** | Google Fonts | Zero layout shift |
+| **Metadata API** | SEO optimization | Better rankings |
+| **ISR** | Hybrid rendering | Best of both worlds |
+
+---
+
+# 🎯 DAY 5: Performance & Optimization
+
+## Overview
+
+Performance is critical for user experience and SEO.
+
+### Topics
+
+1. **Code Splitting** - Lazy loading
+2. **Memoization** - Prevent re-renders
+3. **Image Optimization** - Smaller files
+4. **Caching** - Reduce requests
+5. **Web Vitals** - Measure performance
+6. **Bundle Analysis** - Identify bottlenecks
+
+---
+
+## 1️⃣ Code Splitting
+
+### Dynamic Imports
+
+```jsx
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+
+const HeavyComponent = dynamic(
+  () => import('@/components/Heavy'),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: false // Don't render on server
+  }
+);
+
+export function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HeavyComponent />
+    </Suspense>
+  );
+}
+```
+
+### Benefits
+
+✅ **Smaller initial bundle** - Faster page load
+✅ **Load on demand** - Only when needed
+✅ **Better performance** - Lazy loading
+✅ **Improved UX** - Faster perceived performance
+
+---
+
+## 2️⃣ Memoization
+
+### React.memo
+
+```jsx
+import { memo } from 'react';
+
+const UserCard = memo(({ user }) => {
+  console.log('UserCard rendered');
+  return <div>{user.name}</div>;
+});
+
+export default UserCard;
+```
+
+### useMemo
+
+```jsx
+import { useMemo } from 'react';
+
+export function DataProcessor({ items }) {
+  const processedData = useMemo(() => {
+    console.log('Processing...');
+    return items.map(item => ({
+      ...item,
+      processed: item.value * 2
+    }));
+  }, [items]);
+
+  return <div>{processedData.length} items</div>;
+}
+```
+
+---
+
+## 3️⃣ Image Optimization
+
+### Best Practices
+
+```jsx
+import Image from 'next/image';
+
+export function OptimizedImage() {
+  return (
+    <Image
+      src="/image.jpg"
+      alt="Description"
+      width={800}
+      height={600}
+      quality={75}
+      priority={false}
+      placeholder="blur"
+      blurDataURL="data:image/jpeg;base64,..."
+      sizes="(max-width: 768px) 100vw, 50vw"
+    />
+  );
+}
+```
+
+### Benefits
+
+✅ **Automatic format conversion** - WebP, AVIF
+✅ **Responsive sizing** - Different sizes
+✅ **Lazy loading** - Load when visible
+✅ **Blur placeholder** - Better UX
+✅ **Quality optimization** - Smaller files
+
+---
+
+## 4️⃣ Caching
+
+### Data Caching
+
+```jsx
+// Cache for 1 hour
+export async function getData() {
+  const response = await fetch('https://api.example.com/data', {
+    next: { revalidate: 3600 }
+  });
+  return response.json();
+}
+```
+
+### On-Demand Revalidation
+
+```jsx
+// app/api/revalidate/route.js
+import { revalidatePath } from 'next/cache';
+
+export async function POST(request) {
+  const path = request.nextUrl.searchParams.get('path');
+  revalidatePath(path);
+  return Response.json({ revalidated: true });
+}
+```
+
+---
+
+## 5️⃣ Web Vitals
+
+### Monitoring
+
+```jsx
+// app/layout.jsx
+'use client';
+
+import { useReportWebVitals } from 'next/web-vitals';
+
+export function RootLayout({ children }) {
+  useReportWebVitals((metric) => {
+    console.log(metric);
+    // Send to analytics
+    fetch('/api/analytics', {
+      method: 'POST',
+      body: JSON.stringify(metric)
+    });
+  });
+
+  return <>{children}</>;
+}
+```
+
+### Key Metrics
+
+| Metric | Good | Needs Improvement | Poor |
+|--------|------|-------------------|------|
+| **LCP** | < 2.5s | 2.5s - 4s | > 4s |
+| **FID** | < 100ms | 100ms - 300ms | > 300ms |
+| **CLS** | < 0.1 | 0.1 - 0.25 | > 0.25 |
+
+---
+
+## 6️⃣ Bundle Analysis
+
+### Analyze Bundle
+
+```bash
+# Install analyzer
+npm install --save-dev @next/bundle-analyzer
+
+# next.config.js
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
+  // your config
+});
+
+# Run analysis
+ANALYZE=true npm run build
+```
+
+---
+
+## Summary: Day 5
+
+| Technique | Purpose | Benefit |
+|-----------|---------|---------|
+| **Code Splitting** | Lazy load | Smaller bundle |
+| **Memoization** | Prevent re-renders | Better performance |
+| **Image Optimization** | Smaller images | Faster load |
+| **Caching** | Reduce requests | Better performance |
+| **Web Vitals** | Measure performance | Track improvements |
+| **Bundle Analysis** | Identify bottlenecks | Optimize effectively |
+
+---
+
+# 🎯 DAY 6: Real-world Patterns & Best Practices
+
+## Overview
+
+Real-world patterns and best practices for production applications.
+
+### Topics
+
+1. **Authentication** - JWT, OAuth
+2. **Error Handling** - Boundaries, fallbacks
+3. **Form Validation** - Client & server
+4. **State Management** - Redux, Zustand
+5. **Testing** - Unit, integration, E2E
+
+---
+
+## 1️⃣ Authentication
+
+### JWT Implementation
 
 ```jsx
 // lib/auth.js
-import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
-export async function getSession() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('auth-token')?.value;
-
-  if (!token) return null;
-
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET);
-  } catch {
-    return null;
-  }
+export async function hashPassword(password) {
+  return bcrypt.hash(password, 10);
 }
 
-// middleware.js
-import { getSession } from '@/lib/auth';
-
-export async function middleware(request) {
-  const session = await getSession();
-
-  if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-
-  return NextResponse.next();
+export async function verifyPassword(password, hash) {
+  return bcrypt.compare(password, hash);
 }
 
-// app/api/login/route.js
-import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken';
-
-export async function POST(request) {
-  const { email, password } = await request.json();
-
-  // Validate credentials
-  const user = await validateUser(email, password);
-  if (!user) {
-    return Response.json({ error: 'Invalid credentials' }, { status: 401 });
-  }
-
-  // Create token
-  const token = jwt.sign(
+export function createToken(user) {
+  return jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );
+}
 
-  // Set cookie
-  const cookieStore = await cookies();
-  cookieStore.set('auth-token', token, {
+// app/api/login/route.js
+export async function POST(request) {
+  const { email, password } = await request.json();
+  
+  const user = await db.user.findUnique({ where: { email } });
+  if (!user || !await verifyPassword(password, user.password)) {
+    return Response.json({ error: 'Invalid credentials' }, { status: 401 });
+  }
+  
+  const token = createToken(user);
+  
+  const response = Response.json({ success: true });
+  response.cookies.set('auth-token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60,
+    maxAge: 7 * 24 * 60 * 60
   });
-
-  return Response.json({ success: true, user });
+  
+  return response;
 }
 ```
 
-### 2. Error Handling
+---
+
+## 2️⃣ Error Handling
+
+### Error Boundary
 
 ```jsx
-// app/error.jsx - Error boundary
+// app/error.jsx
 'use client';
 
 export default function Error({ error, reset }) {
@@ -1162,7 +2252,11 @@ export default function Error({ error, reset }) {
     </div>
   );
 }
+```
 
+### Not Found
+
+```jsx
 // app/not-found.jsx
 export default function NotFound() {
   return (
@@ -1172,409 +2266,276 @@ export default function NotFound() {
     </div>
   );
 }
-
-// app/api/error-handler.js
-export function handleApiError(error) {
-  console.error(error);
-
-  if (error.code === 'VALIDATION_ERROR') {
-    return Response.json(
-      { error: error.message },
-      { status: 400 }
-    );
-  }
-
-  if (error.code === 'NOT_FOUND') {
-    return Response.json(
-      { error: 'Resource not found' },
-      { status: 404 }
-    );
-  }
-
-  return Response.json(
-    { error: 'Internal server error' },
-    { status: 500 }
-  );
-}
 ```
 
-### 3. Form Validation Pattern
+---
+
+## 3️⃣ Form Validation
+
+### With Zod
 
 ```jsx
-// lib/validation.js
 import { z } from 'zod';
 
-export const userSchema = z.object({
+const userSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters')
 });
 
 // app/actions/user.js
 'use server';
 
-import { userSchema } from '@/lib/validation';
-
 export async function createUser(formData) {
   const data = {
     name: formData.get('name'),
     email: formData.get('email'),
-    password: formData.get('password'),
+    password: formData.get('password')
   };
 
   try {
     const validated = userSchema.parse(data);
-    // Create user...
-    return { success: true };
+    const user = await db.user.create({ data: validated });
+    return { success: true, user };
   } catch (error) {
     return { success: false, errors: error.flatten().fieldErrors };
   }
 }
-
-// app/components/UserForm.jsx
-'use client';
-
-import { useActionState } from 'react';
-import { createUser } from '@/app/actions/user';
-
-export function UserForm() {
-  const [state, formAction] = useActionState(createUser, null);
-
-  return (
-    <form action={formAction}>
-      <input name="name" placeholder="Name" />
-      {state?.errors?.name && <p>{state.errors.name}</p>}
-
-      <input name="email" type="email" placeholder="Email" />
-      {state?.errors?.email && <p>{state.errors.email}</p>}
-
-      <input name="password" type="password" placeholder="Password" />
-      {state?.errors?.password && <p>{state.errors.password}</p>}
-
-      <button type="submit">Create User</button>
-    </form>
-  );
-}
 ```
 
-### 4. Data Fetching Patterns
+---
+
+## 4️⃣ State Management
+
+### Redux Toolkit
 
 ```jsx
-// lib/api.js
-export async function fetchWithRetry(url, options = {}, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url, {
-        ...options,
-        next: { revalidate: 60 },
-      });
+import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return response.json();
-    } catch (error) {
-      if (i === retries - 1) throw error;
-      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+const todoSlice = createSlice({
+  name: 'todos',
+  initialState: [],
+  reducers: {
+    addTodo: (state, action) => {
+      state.push(action.payload);
     }
   }
-}
+});
 
-// Usage in Server Component
-import { fetchWithRetry } from '@/lib/api';
+const store = configureStore({
+  reducer: {
+    todos: todoSlice.reducer
+  }
+});
 
-export async function UserList() {
-  const users = await fetchWithRetry('/api/users');
-
-  return (
-    <ul>
-      {users.map(user => (
-        <li key={user.id}>{user.name}</li>
-      ))}
-    </ul>
-  );
-}
+export const { addTodo } = todoSlice.actions;
 ```
 
-### 5. State Management Pattern (Zustand)
+### Zustand
 
 ```jsx
-// lib/store.js
 import { create } from 'zustand';
 
-export const useUserStore = create((set) => ({
-  user: null,
-  isLoading: false,
-  error: null,
-
-  setUser: (user) => set({ user }),
-  
-  fetchUser: async (id) => {
-    set({ isLoading: true });
-    try {
-      const response = await fetch(`/api/users/${id}`);
-      const user = await response.json();
-      set({ user, error: null });
-    } catch (error) {
-      set({ error: error.message });
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-
-  clearUser: () => set({ user: null }),
+const useTodoStore = create((set) => ({
+  todos: [],
+  addTodo: (text) => set((state) => ({
+    todos: [...state.todos, { id: Date.now(), text }]
+  }))
 }));
-
-// Usage in Client Component
-'use client';
-
-import { useUserStore } from '@/lib/store';
-
-export function UserProfile() {
-  const { user, isLoading, fetchUser } = useUserStore();
-
-  return (
-    <div>
-      {isLoading && <p>Loading...</p>}
-      {user && <h1>{user.name}</h1>}
-      <button onClick={() => fetchUser(1)}>Load User</button>
-    </div>
-  );
-}
 ```
 
 ---
 
-## 🎯 DAY 7: Interview Q&A & Mock Questions
+## 5️⃣ Testing
 
-### Common Interview Questions
-
-#### Q1: What's the difference between Server Components and Client Components?
-
-**Answer:**
-- **Server Components**: Run only on the server, can access databases directly, no JavaScript sent to browser
-- **Client Components**: Run in the browser, can use hooks, handle interactivity
-- Use `'use server'` and `'use client'` directives
+### Unit Test
 
 ```jsx
-// Server Component (default)
-export async function ServerComponent() {
-  const data = await db.query();
-  return <div>{data}</div>;
-}
+import { render, screen } from '@testing-library/react';
+import { Component } from './Component';
 
-// Client Component
-'use client';
-import { useState } from 'react';
-
-export function ClientComponent() {
-  const [count, setCount] = useState(0);
-  return <button onClick={() => setCount(count + 1)}>{count}</button>;
-}
+test('renders correctly', () => {
+  render(<Component />);
+  expect(screen.getByText('Hello')).toBeInTheDocument();
+});
 ```
 
-#### Q2: Explain React 19's useActionState hook
-
-**Answer:**
-`useActionState` simplifies form handling by managing pending state and form submission:
+### Integration Test
 
 ```jsx
-const [state, formAction, isPending] = useActionState(serverAction, initialState);
-```
+import { render, screen, fireEvent } from '@testing-library/react';
+import { TodoApp } from './TodoApp';
 
-#### Q3: What are Server Actions?
-
-**Answer:**
-Server Actions are async functions marked with `'use server'` that run on the server and can be called from Client Components:
-
-```jsx
-'use server';
-export async function updateUser(formData) {
-  // Runs on server
-  await db.user.update(...);
-}
-```
-
-#### Q4: How do you handle authentication in Next.js?
-
-**Answer:**
-Use middleware to protect routes and store tokens in httpOnly cookies:
-
-```jsx
-// middleware.js
-export function middleware(request) {
-  const token = request.cookies.get('auth-token');
-  if (!token) return NextResponse.redirect('/login');
-}
-```
-
-#### Q5: What's the difference between ISR and SSG?
-
-**Answer:**
-- **SSG (Static Site Generation)**: Built at build time, never changes
-- **ISR (Incremental Static Regeneration)**: Built at build time, revalidates on demand or after time interval
-
-```jsx
-export const revalidate = 60; // Revalidate every 60 seconds
-```
-
-#### Q6: How do you optimize images in Next.js?
-
-**Answer:**
-Use the `Image` component with automatic optimization:
-
-```jsx
-<Image
-  src="/image.jpg"
-  alt="Description"
-  width={800}
-  height={600}
-  priority
-  quality={75}
-/>
-```
-
-#### Q7: Explain the React Compiler
-
-**Answer:**
-React 19's compiler automatically optimizes components by:
-- Memoizing expensive computations
-- Removing unnecessary re-renders
-- Optimizing dependency tracking
-
-No need for manual `useMemo` or `useCallback` in most cases.
-
-#### Q8: What's the difference between useTransition and useActionState?
-
-**Answer:**
-- **useTransition**: For any async operation, returns `isPending` and `startTransition`
-- **useActionState**: Specifically for form actions, manages form state and submission
-
-```jsx
-// useTransition
-const [isPending, startTransition] = useTransition();
-startTransition(async () => { await action(); });
-
-// useActionState
-const [state, formAction, isPending] = useActionState(action, initial);
-```
-
-#### Q9: How do you handle errors in Next.js?
-
-**Answer:**
-Use error boundaries and error.jsx:
-
-```jsx
-// app/error.jsx
-'use client';
-export default function Error({ error, reset }) {
-  return (
-    <div>
-      <h2>Error: {error.message}</h2>
-      <button onClick={() => reset()}>Try again</button>
-    </div>
-  );
-}
-```
-
-#### Q10: What's the purpose of middleware in Next.js?
-
-**Answer:**
-Middleware runs before requests are processed, useful for:
-- Authentication checks
-- Redirects
-- Request logging
-- Setting headers
-
-```jsx
-export function middleware(request) {
-  // Runs before every request
-  return NextResponse.next();
-}
+test('adds a todo', async () => {
+  render(<TodoApp />);
+  
+  const input = screen.getByPlaceholderText('Add a todo');
+  const button = screen.getByText('Add');
+  
+  fireEvent.change(input, { target: { value: 'Learn React' } });
+  fireEvent.click(button);
+  
+  expect(screen.getByText('Learn React')).toBeInTheDocument();
+});
 ```
 
 ---
 
-## 📚 Key Concepts to Review
+## Summary: Day 6
 
-### React 19
-- ✅ React Compiler
-- ✅ Server Components
-- ✅ Server Actions
-- ✅ useActionState
-- ✅ useFormStatus
-- ✅ useOptimistic
-- ✅ use() hook
-- ✅ Ref as prop (no forwardRef)
-
-### Next.js 15
-- ✅ App Router
-- ✅ Server Components by default
-- ✅ API Routes
-- ✅ Middleware
-- ✅ Image Optimization
-- ✅ Font Optimization
-- ✅ Metadata API
-- ✅ ISR & Revalidation
-- ✅ Dynamic Routes
-- ✅ Streaming & Suspense
-
-### Performance
-- ✅ Code Splitting
-- ✅ Image Optimization
-- ✅ Caching Strategies
-- ✅ Web Vitals
-- ✅ Bundle Analysis
-
-### Best Practices
-- ✅ Authentication Patterns
-- ✅ Error Handling
-- ✅ Form Validation
-- ✅ Data Fetching
-- ✅ State Management
+| Pattern | Purpose | Benefit |
+|---------|---------|---------|
+| **Authentication** | Secure access | Protect data |
+| **Error Handling** | Handle failures | Better UX |
+| **Form Validation** | Validate input | Prevent errors |
+| **State Management** | Manage state | Scalable apps |
+| **Testing** | Verify code | Reliable apps |
 
 ---
 
-## 🎯 Practice Projects
+# 🎯 DAY 7: Interview Q&A & Mock Interview
 
-### Project 1: Blog Platform
-- Server Components for posts
-- Server Actions for comments
-- ISR for post pages
-- Authentication with middleware
+## Common Interview Questions
 
-### Project 2: E-commerce Dashboard
-- Dynamic product pages
-- Server Actions for cart management
-- Image optimization
-- Performance monitoring
+### React 19 Questions
 
-### Project 3: Real-time Chat App
-- WebSocket integration
-- Server Components for message history
-- Client Components for real-time updates
-- Authentication
+**Q1: What's the main benefit of React Compiler?**
+
+A: React Compiler automatically optimizes components by memoizing values and callbacks without manual React.memo, useMemo, or useCallback. This reduces boilerplate and ensures consistent performance.
+
+**Q2: Explain useActionState hook**
+
+A: useActionState simplifies form handling by managing form state and submission status. It takes a server action and returns [state, formAction, isPending], automatically handling loading states and form submission.
+
+**Q3: What's the difference between Server and Client Components?**
+
+A: Server Components run only on the server (no JavaScript sent to browser), can access databases directly, and are better for data fetching. Client Components run in the browser, can use hooks, and handle interactivity.
+
+**Q4: How do Server Actions work?**
+
+A: Server Actions are async functions marked with 'use server' that run on the server. They can be called from Client Components, automatically handle form submissions, and can revalidate cache.
+
+**Q5: What's useOptimistic hook?**
+
+A: useOptimistic allows optimistic UI updates before the server responds. It updates the UI immediately, then reverts if the operation fails, providing better perceived performance.
+
+### Next.js Questions
+
+**Q6: Explain ISR (Incremental Static Regeneration)**
+
+A: ISR combines static generation with dynamic updates. Pages are built at build time but revalidated on demand or after a time interval, providing fast performance with fresh content.
+
+**Q7: How do you protect routes in Next.js?**
+
+A: Use middleware to check authentication before allowing access. If the user isn't authenticated, redirect to login. This works for both Server and Client Components.
+
+**Q8: What's the difference between getStaticProps and ISR?**
+
+A: getStaticProps (Pages Router) builds pages at build time and never updates. ISR (App Router) builds at build time but revalidates on demand or after time, providing fresh content.
+
+**Q9: How do you optimize images in Next.js?**
+
+A: Use the `<Image>` component which automatically optimizes images with format conversion (WebP, AVIF), responsive sizing, lazy loading, and blur placeholders.
+
+**Q10: Explain middleware in Next.js**
+
+A: Middleware runs before requests are processed. It's useful for authentication checks, redirects, request logging, and setting headers. Use the matcher config to specify which routes it applies to.
 
 ---
 
-## 📖 Resources
+## Mock Interview Scenario
 
-- [React 19 Docs](https://react.dev)
-- [Next.js 15 Docs](https://nextjs.org/docs)
-- [React Compiler Docs](https://react.dev/learn/react-compiler)
-- [Next.js Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)
+### Scenario: Design a Todo App
+
+**Interviewer:** "Design a todo app using React 19 and Next.js 15. Include authentication, real-time updates, and performance optimization."
+
+**Your Answer Structure:**
+
+1. **Architecture Overview**
+   - Server Components for data fetching
+   - Client Components for interactivity
+   - Server Actions for mutations
+   - Middleware for authentication
+
+2. **Authentication**
+   - JWT tokens in httpOnly cookies
+   - Middleware to protect routes
+   - Login/Signup pages
+
+3. **Features**
+   - Add/Edit/Delete todos
+   - Mark as complete
+   - Filter todos
+   - Real-time updates with Suspense
+
+4. **Performance**
+   - Code splitting for heavy components
+   - Image optimization
+   - Caching with ISR
+   - Memoization where needed
+
+5. **Database Schema**
+   - Users table
+   - Todos table with userId foreign key
+
+6. **API Design**
+   - GET /api/todos - Get user's todos
+   - POST /api/todos - Create todo
+   - PUT /api/todos/[id] - Update todo
+   - DELETE /api/todos/[id] - Delete todo
 
 ---
 
-## ✅ Pre-Interview Checklist
+## Practice Questions
 
-- [ ] Understand React 19 new hooks
-- [ ] Know Server Components vs Client Components
-- [ ] Practice Server Actions
-- [ ] Review Next.js routing
-- [ ] Study performance optimization
-- [ ] Prepare real-world examples
-- [ ] Practice mock interviews
-- [ ] Review error handling patterns
-- [ ] Study authentication flows
-- [ ] Know caching strategies
+### Easy
 
-Good luck with your interview! 🚀
+1. What's the difference between useState and useReducer?
+2. How do you pass data from Server to Client Component?
+3. What's the purpose of useEffect cleanup?
+4. How do you handle errors in Next.js?
+5. What's the benefit of Server Components?
+
+### Medium
+
+6. Design a shopping cart system
+7. Implement authentication with JWT
+8. Optimize a slow React component
+9. Design a real-time notification system
+10. Implement form validation
+
+### Hard
+
+11. Design a complete e-commerce platform
+12. Implement a real-time chat application
+13. Design a file upload system with progress
+14. Implement a complex state management system
+15. Design a scalable multi-tenant application
+
+---
+
+## Final Tips
+
+✅ **Understand concepts deeply** - Not just syntax
+✅ **Think about trade-offs** - Pros and cons
+✅ **Consider scalability** - How does it grow?
+✅ **Think about performance** - Optimization matters
+✅ **Consider security** - Always think about safety
+✅ **Ask clarifying questions** - Understand requirements
+✅ **Explain your reasoning** - Show your thinking
+✅ **Use real examples** - From your experience
+
+---
+
+## Conclusion
+
+You now have a comprehensive understanding of:
+
+✅ React 19 fundamentals and advanced features
+✅ Next.js 15 architecture and best practices
+✅ Server Components and Server Actions
+✅ Performance optimization techniques
+✅ Real-world patterns and best practices
+✅ Interview preparation and Q&A
+
+**Good luck with your interview! You've got this! 🚀**
